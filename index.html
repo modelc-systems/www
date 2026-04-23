@@ -1,0 +1,328 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>modelc — Portable, Inspectable AI Model Containers</title>
+  <meta name="description" content="modelc is a CLI and specification for packaging AI models as portable, inspectable containers with defined interfaces and reproducible execution." />
+  <meta name="theme-color" content="#12304a" />
+  <link rel="icon" href="modelc.png" type="image/png" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="announcement">
+    <div class="container announcement-inner">
+      <span>v0.1.0 is now available on PyPI.</span>
+      <a href="https://pypi.org/project/modelc/" target="_blank" rel="noreferrer">View package</a>
+    </div>
+  </div>
+
+  <header class="site-header">
+    <div class="container header-inner">
+      <a class="brand" href="#">
+        <img src="modelc.png" alt="modelc logo" class="brand-logo">
+        <span class="brand-wordmark">modelc</span>
+      </a>
+
+      <nav class="main-nav" aria-label="Primary">
+        <a href="#overview">Overview</a>
+        <a href="#manifest">Manifest</a>
+        <a href="#workflow">Workflow</a>
+        <a href="#roadmap">Roadmap</a>
+        <a href="https://github.com/modelc-systems/modelc-spec" target="_blank" rel="noreferrer">Spec</a>
+      </nav>
+
+      <div class="header-actions">
+        <a class="button ghost" href="https://github.com/modelc-systems/modelc" target="_blank" rel="noreferrer">GitHub</a>
+        <button class="button solid" id="copyInstallTop" type="button">Copy install</button>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero" id="overview">
+      <div class="container hero-grid">
+        <div class="hero-copy">
+          <p class="eyebrow">Developer infrastructure for AI systems</p>
+          <h1>AI model containers with a clearer execution boundary.</h1>
+          <p class="lede">
+            modelc is a CLI and specification for packaging AI models as portable, inspectable units
+            with declared artifacts, defined interfaces, and reproducible execution.
+          </p>
+
+          <div class="hero-cta">
+            <a class="button solid" href="https://github.com/modelc-systems/modelc" target="_blank" rel="noreferrer">Get the code</a>
+            <a class="button ghost" href="#workflow">How it works</a>
+          </div>
+
+          <div class="install-strip">
+            <div class="install-strip-label">Install</div>
+            <div class="install-strip-main">
+              <code id="installCommand">pip install modelc</code>
+              <button id="copyInstallInline" class="copy-chip" type="button">Copy</button>
+            </div>
+          </div>
+
+          <dl class="hero-facts">
+            <div>
+              <dt>Packaging</dt>
+              <dd>Portable <code>.modelc.tar.gz</code> archives</dd>
+            </div>
+            <div>
+              <dt>Execution</dt>
+              <dd>Structured JSON in, structured JSON out</dd>
+            </div>
+            <div>
+              <dt>Focus</dt>
+              <dd>Inspectability, portability, reproducibility</dd>
+            </div>
+          </dl>
+        </div>
+
+        <aside class="hero-aside">
+          <div class="panel intro-panel">
+            <div class="panel-kicker">Why modelc</div>
+            <h2>A model should be understandable before it is executed.</h2>
+            <p>
+              Most model delivery still depends on scattered files, undocumented assumptions, and ad hoc run instructions.
+              modelc introduces a small, explicit unit of AI execution that can be built, inspected, and run consistently.
+            </p>
+          </div>
+
+          <div class="panel terminal-panel">
+            <div class="terminal-head">
+              <span></span><span></span><span></span>
+            </div>
+<pre><code>$ modelc inspect sentiment-basic.modelc.tar.gz
+
+Name: sentiment-basic
+Version: 0.1.0
+Runtime: python 3.11
+Entrypoint: python entrypoint/run.py
+
+$ modelc run . --input '{"text":"I love this"}'
+
+{
+  "label": "positive",
+  "confidence": 0.98
+}</code></pre>
+          </div>
+        </aside>
+      </div>
+    </section>
+
+    <section class="section band">
+      <div class="container">
+        <div class="three-stat">
+          <div class="stat-card">
+            <h3>Portable</h3>
+            <p>Package models as self-contained artifacts instead of loose collections of files and assumptions.</p>
+          </div>
+          <div class="stat-card">
+            <h3>Inspectable</h3>
+            <p>Read the structure, runtime requirements, and interface before you run anything.</p>
+          </div>
+          <div class="stat-card">
+            <h3>Composable</h3>
+            <p>Use declared interfaces as a foundation for evaluation, contracts, and larger systems.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section content-section">
+      <div class="container two-col">
+        <div class="section-head">
+          <p class="eyebrow">The gap</p>
+          <h2>Model delivery is still more fragile than it should be.</h2>
+        </div>
+        <div class="rich-text">
+          <p>
+            Even when a model is available publicly, using it often requires reconstructing an environment,
+            identifying the right artifacts, and interpreting informal assumptions about input shape, output
+            structure, and execution flow.
+          </p>
+          <p>
+            In software, containers created a cleaner boundary between code and runtime. In AI, that boundary is
+            still weak. modelc is an attempt to define a small but useful primitive at that layer.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <section class="section split-section" id="manifest">
+      <div class="container split-grid">
+        <div class="split-copy">
+          <p class="eyebrow">The manifest</p>
+          <h2>A simple spec with explicit structure.</h2>
+          <p>
+            modelc uses a developer-friendly manifest that keeps the important parts visible:
+            metadata, runtime, artifacts, interface schema, and entrypoint.
+          </p>
+
+          <ul class="check-list">
+            <li>Schema versioning through <code>apiVersion</code></li>
+            <li>Declared runtime requirements</li>
+            <li>Named artifacts for weights and tokenizers</li>
+            <li>Input and output schema definitions</li>
+            <li>Predictable execution entrypoint</li>
+          </ul>
+        </div>
+
+        <div class="code-block">
+<pre><code>apiVersion: modelc.dev/v0
+kind: ModelContainer
+
+metadata:
+  name: sentiment-basic
+  version: 0.1.0
+
+runtime:
+  type: python
+  version: "3.11"
+
+artifacts:
+  weights:
+    path: ./model/
+    format: pytorch
+  tokenizer:
+    path: ./tokenizer/
+    format: huggingface
+
+interface:
+  input:
+    type: text
+    schema:
+      text: string
+  output:
+    type: classification
+    schema:
+      label: string
+      confidence: float
+
+entrypoint:
+  command: python run.py</code></pre>
+        </div>
+      </div>
+    </section>
+
+    <section class="section workflow-section" id="workflow">
+      <div class="container">
+        <div class="section-head centered">
+          <p class="eyebrow">Workflow</p>
+          <h2>A tighter build, inspect, and run cycle.</h2>
+        </div>
+
+        <div class="workflow-grid">
+          <article class="workflow-card">
+            <div class="workflow-number">01</div>
+            <h3>Describe</h3>
+            <p>Use <code>model.yaml</code> to define the model’s structure, runtime requirements, artifacts, interface, and entrypoint.</p>
+          </article>
+          <article class="workflow-card">
+            <div class="workflow-number">02</div>
+            <h3>Build</h3>
+            <p>Package the project into a portable archive with a resolved manifest and a predictable internal layout.</p>
+          </article>
+          <article class="workflow-card">
+            <div class="workflow-number">03</div>
+            <h3>Inspect</h3>
+            <p>Read model metadata, artifacts, and schemas without executing the model first.</p>
+          </article>
+          <article class="workflow-card">
+            <div class="workflow-number">04</div>
+            <h3>Run</h3>
+            <p>Pass JSON through stdin, execute the entrypoint, and validate output against the declared schema.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section content-section soft">
+      <div class="container two-col reverse">
+        <div class="section-head">
+          <p class="eyebrow">Positioning</p>
+          <h2>Not a platform. Not a framework.</h2>
+        </div>
+        <div class="rich-text">
+          <p>
+            modelc is meant to be a systems primitive. It defines a unit of packaging and execution that can
+            support future layers such as evaluation, contracts, signing, provenance, and registry workflows.
+          </p>
+          <p>
+            The emphasis is on a disciplined v0: keep the boundary small, useful, and easy to reason about.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <section class="section roadmap-section" id="roadmap">
+      <div class="container">
+        <div class="section-head centered">
+          <p class="eyebrow">Roadmap</p>
+          <h2>Build the primitive first. Expand carefully.</h2>
+        </div>
+
+        <div class="roadmap-table">
+          <div class="roadmap-row roadmap-head">
+            <div>Stage</div>
+            <div>Focus</div>
+            <div>What it means</div>
+          </div>
+          <div class="roadmap-row">
+            <div class="stage">Now</div>
+            <div>Reference implementation</div>
+            <div>CLI support for build, inspect, and run using a minimal manifest and a Python execution contract.</div>
+          </div>
+          <div class="roadmap-row">
+            <div class="stage">Next</div>
+            <div>Specification hardening</div>
+            <div>Clarify validation rules, package layout, versioning expectations, and compatibility guarantees.</div>
+          </div>
+          <div class="roadmap-row">
+            <div class="stage">Later</div>
+            <div>Trust and distribution layers</div>
+            <div>Add signing, provenance, registry workflows, and stronger integration with evaluation and contract systems.</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section final-cta">
+      <div class="container cta-box">
+        <div>
+          <p class="eyebrow">Start here</p>
+          <h2>Install the CLI and explore the reference implementation.</h2>
+          <p>
+            modelc is early, but usable. Read the code, inspect the manifest format, and follow the direction of the spec.
+          </p>
+        </div>
+        <div class="cta-actions">
+          <a class="button solid" href="https://pypi.org/project/modelc/" target="_blank" rel="noreferrer">PyPI</a>
+          <a class="button ghost" href="https://github.com/modelc-systems/modelc" target="_blank" rel="noreferrer">GitHub</a>
+          <a class="button ghost" href="https://github.com/modelc-systems/modelc-spec" target="_blank" rel="noreferrer">Spec</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <div>
+        <div class="brand footer-brand">
+          <span class="brand-mark">mc</span>
+          <span class="brand-wordmark">modelc</span>
+        </div>
+        <p class="footer-copy">A CLI and specification for portable, inspectable AI model containers.</p>
+      </div>
+      <div class="footer-links">
+        <a href="https://pypi.org/project/modelc/" target="_blank" rel="noreferrer">PyPI</a>
+        <a href="https://github.com/modelc-systems/modelc" target="_blank" rel="noreferrer">GitHub</a>
+        <a href="https://github.com/modelc-systems/modelc-spec" target="_blank" rel="noreferrer">Specification</a>
+      </div>
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
